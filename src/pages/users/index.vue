@@ -15,8 +15,6 @@ onMounted(() => dispatchAction('fetchItems'))
 
 <template>
   <div>
-    <router-view></router-view>
-
     <router-link :to="{name: 'users.create'}">
       Create new user
     </router-link>
