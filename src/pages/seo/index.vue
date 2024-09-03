@@ -19,9 +19,24 @@ onMounted(() => dispatchAction('fetchItems'))
       Create new seo
     </router-link>
 
-    <pre>
-      {{ items }}
-    </pre>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="item in items" :key="item.id">
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>
+          <router-link :to="{name: 'seo.edit', params: {id: item.id}}">Edit</router-link>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     params: {{ params }}
     loading: {{ loading }}

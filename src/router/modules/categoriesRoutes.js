@@ -23,6 +23,7 @@ export const categoriesRoutes = [
         path: '/categories/:id/edit',
         name: 'categories.edit',
         component: () => import("../../pages/categories/modify.vue"),
+        props: true,
         meta: {
             title: 'Edit category',
             middleware: 'guest',

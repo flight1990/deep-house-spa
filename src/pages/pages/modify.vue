@@ -1,6 +1,49 @@
+<script setup>
+import {useStoreModule} from "../../composables/useStoreModule.js";
+import {onMounted, ref} from "vue";
+
+const {id} = defineProps({
+  id: String,
+});
+
+const {getState, dispatchAction} = useStoreModule('pagesStore');
+
+const payload = ref({
+  name: '',
+  body: ''
+});
+
+const fetchItem = async (id) => {
+  if (!id) return;
+
+  await dispatchAction('fetchItem', id);
+  const item = getState('item');
+
+  if (item) {
+    payload.value.name = item.value.name
+    payload.value.body = item.value.body
+  }
+};
+
+onMounted(() => fetchItem(id));
+
+</script>
+
 <template>
   <div>
-    pages: modify
+    <form>
+      <div>
+        <label for="name">Name:</label>
+        <input v-model="payload.name" type="text" id="name">
+      </div>
+
+      <div>
+        <label for="body">Body:</label>
+        <textarea rows="10" cols="150" v-model="payload.body" id="body"></textarea>
+      </div>
+
+      <button type="submit">Save</button>
+    </form>
   </div>
 </template>
 

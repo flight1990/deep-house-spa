@@ -23,6 +23,7 @@ export const seoRoutes = [
         path: '/seo/:id/edit',
         name: 'seo.edit',
         component: () => import("../../pages/seo/modify.vue"),
+        props: true,
         meta: {
             title: 'Edit seo',
             middleware: 'guest',

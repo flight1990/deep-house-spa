@@ -23,6 +23,7 @@ export const productsRoutes = [
         path: '/products/:id/edit',
         name: 'products.edit',
         component: () => import("../../pages/products/modify.vue"),
+        props: true,
         meta: {
             title: 'Edit product',
             middleware: 'guest',

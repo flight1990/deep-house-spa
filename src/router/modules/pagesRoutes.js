@@ -23,6 +23,7 @@ export const pagesRoutes = [
         path: '/pages/:id/edit',
         name: 'pages.edit',
         component: () => import("../../pages/pages/modify.vue"),
+        props: true,
         meta: {
             title: 'Edit page',
             middleware: 'guest',

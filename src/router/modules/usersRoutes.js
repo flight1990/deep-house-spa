@@ -23,6 +23,7 @@ export const usersRoutes = [
         path: '/users/:id/edit',
         name: 'users.edit',
         component: () => import("../../pages/users/modify.vue"),
+        props: true,
         meta: {
             title: 'Edit user',
             middleware: 'guest',

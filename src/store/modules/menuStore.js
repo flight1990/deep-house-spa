@@ -28,6 +28,16 @@ const actions = {
         } finally {
             commit('SET_LOADING', false)
         }
+    },
+    async fetchItem({commit}, id) {
+        try {
+            const {data} = await MenuRepository.findById(id)
+            commit('SET_ITEM', data.data)
+        } catch (e) {
+
+        } finally {
+
+        }
     }
 }
 

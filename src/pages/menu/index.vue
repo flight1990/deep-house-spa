@@ -17,9 +17,24 @@ onMounted(() => dispatchAction('fetchItems'))
       Create new menu item
     </router-link>
 
-    <pre>
-      {{ items }}
-    </pre>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="item in items" :key="item.id">
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>
+          <router-link :to="{name: 'menu.edit', params: {id: item.id}}">Edit</router-link>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     loading: {{ loading }}
   </div>

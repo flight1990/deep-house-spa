@@ -23,6 +23,7 @@ export const menuRoutes = [
         path: '/menu/:id/edit',
         name: 'menu.edit',
         component: () => import("../../pages/menu/modify.vue"),
+        props: true,
         meta: {
             title: 'Edit menu item',
             middleware: 'guest',
