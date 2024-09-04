@@ -1,25 +1,26 @@
 <script setup>
 import {useStoreModule} from "../../composables/useStoreModule.js";
 import {useTreeData} from "../../composables/useTreeData.js";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 
 const {id} = defineProps({
   id: String,
 })
 
 const {getState, dispatchAction} = useStoreModule('menuStore')
-const {processedData: processedParents, setTree} = useTreeData()
 
 const item = getState('item')
-const parents = getState('items')
+const parents = computed(() => useTreeData(getState('items').value))
 
 const payload = ref({
   name: '',
+  url: '',
   parent_id: ''
 })
 
 const intPayload = (data) => {
   payload.value.name = data.name
+  payload.value.url = data.url
   payload.value.parent_id = data.parent_id ?? ''
 }
 
@@ -37,10 +38,7 @@ onMounted(async () => {
     intPayload(item.value)
   }
 
-  await dispatchAction('setParams', {id: id})
-  await dispatchAction('fetchItems')
-
-  setTree(parents.value)
+  await dispatchAction('fetchItems', {id: id})
 })
 
 </script>
@@ -52,13 +50,18 @@ onMounted(async () => {
         <label for="parent_id">Parent</label>
         <select name="parent_id" id="parent_id" v-model="payload.parent_id">
           <option value="">Choose parent...</option>
-          <option :value="parent.id" v-for="parent in processedParents" :key="parent.id">{{ parent.name }}</option>
+          <option :value="parent.id" v-for="parent in parents" :key="parent.id">{{ parent.name }}</option>
         </select>
       </div>
 
       <div>
         <label for="name">Name:</label>
         <input v-model="payload.name" type="text" id="name">
+      </div>
+
+      <div>
+        <label for="url">Url:</label>
+        <input v-model="payload.url" type="text" id="url">
       </div>
 
       <button type="submit" @click.prevent="onSubmit">Save</button>

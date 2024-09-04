@@ -18,9 +18,10 @@ const mutations = {
 
 const actions = {
     ...commonActions,
-    async fetchItems({commit, getters}) {
+    async fetchItems({commit, getters}, params = {}) {
         try {
             commit('SET_LOADING', true)
+            commit('SET_PARAMS', params)
 
             const {data} = await CategoriesRepository.getAll(getters.params);
             commit('SET_ITEMS', data.data)

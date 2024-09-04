@@ -8,14 +8,7 @@ const {getState, dispatchAction} = useStoreModule('menuStore')
 const loading = getState('loading')
 const items = getState('items')
 
-const onDelete = async (id) => {
-  await dispatchAction('deleteItem', id)
-}
-
-onMounted(async () => {
-  await dispatchAction('setParams', {})
-  await dispatchAction('fetchItems')
-})
+onMounted( () => dispatchAction('fetchItems'))
 
 </script>
 
@@ -27,7 +20,7 @@ onMounted(async () => {
 
     <TheMenuTree
         :items="items"
-        @item:deleted="onDelete"
+        @item:deleted="dispatchAction('deleteItem', $event)"
     />
 
     loading: {{ loading }}

@@ -22,9 +22,13 @@ const mutations = {
 
 const actions = {
     ...commonActions,
-    async fetchItems({commit, getters}) {
+    async fetchItems({commit, getters}, params = null) {
         try {
             commit('SET_LOADING', true)
+
+            if (params) {
+                commit('SET_PARAMS', params)
+            }
 
             const {data} = await ProductsRepository.getAll(getters.params);
 

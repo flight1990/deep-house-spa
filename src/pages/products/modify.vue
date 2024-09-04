@@ -1,6 +1,7 @@
 <script setup>
 import {useStoreModule} from "../../composables/useStoreModule.js";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
+import {useTreeData} from "../../composables/useTreeData.js";
 
 const {id} = defineProps({
   id: String,
@@ -10,7 +11,7 @@ const {getState, dispatchAction} = useStoreModule('productsStore');
 const {getState: getCategoriesState, dispatchAction: dispatchCategoriesAction} = useStoreModule('categoriesStore');
 
 const item = getState('item');
-const categories = getCategoriesState('items');
+const categories = computed(() => useTreeData(getCategoriesState('items').value));
 
 const payload = ref({
   name: '',
@@ -40,7 +41,6 @@ onMounted(async () => {
     initPayload(item.value)
   }
 
-  await dispatchCategoriesAction('setParams', {})
   await dispatchCategoriesAction('fetchItems')
 })
 
