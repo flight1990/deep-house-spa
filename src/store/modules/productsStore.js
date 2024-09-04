@@ -1,10 +1,15 @@
 import {initializeCommonState, commonGetters, commonMutations, commonActions} from "./commonStore.js";
 import ProductsRepository from "../../repository/ProductsRepository.js";
+import router from "../../router/index.js";
 
 const commonState = initializeCommonState();
 
 const state = {
-    ...commonState
+    ...commonState,
+    params: {
+        page: 1,
+        limit:  10
+    }
 }
 
 const getters = {
@@ -35,6 +40,36 @@ const actions = {
         try {
             const {data} = await ProductsRepository.findById(id)
             commit('SET_ITEM', data.data)
+        } catch (e) {
+
+        } finally {
+
+        }
+    },
+    async createItem(ctx, payload) {
+        try {
+            await ProductsRepository.store(payload)
+            await router.push({name: 'products.index'})
+        } catch (e) {
+
+        } finally {
+
+        }
+    },
+    async updateItem(ctx, {payload, id}) {
+        try {
+            await ProductsRepository.update(payload, id)
+            await router.push({name: 'products.index'})
+        } catch (e) {
+
+        } finally {
+
+        }
+    },
+    async deleteItem({dispatch}, id) {
+        try {
+            await ProductsRepository.destroy(id)
+            dispatch('fetchItems')
         } catch (e) {
 
         } finally {

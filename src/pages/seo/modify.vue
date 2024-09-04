@@ -4,9 +4,10 @@ import {onMounted, ref} from "vue";
 
 const {id} = defineProps({
   id: String,
-});
+})
 
-const {getState, dispatchAction} = useStoreModule('seoStore');
+const {getState, dispatchAction} = useStoreModule('seoStore')
+const item = getState('item')
 
 const payload = ref({
   title: '',
@@ -14,24 +15,30 @@ const payload = ref({
   keywords: '',
   index: false,
   follow: false
-});
+})
 
-const fetchItem = async (id) => {
-  if (!id) return;
+const initPayload = (data) => {
+  payload.value.title = data.title
+  payload.value.description = data.description
+  payload.value.keywords = data.keywords
+  payload.value.index = data.index
+  payload.value.follow = data.follow
+}
 
-  await dispatchAction('fetchItem', id);
-  const item = getState('item');
-
-  if (item) {
-    payload.value.title = item.value.title
-    payload.value.description = item.value.description
-    payload.value.keywords = item.value.keywords
-    payload.value.index = item.value.index
-    payload.value.follow = item.value.follow
+const onSubmit = () => {
+  if (id) {
+    dispatchAction('updateItem', {payload: payload.value, id: id})
+  } else {
+    dispatchAction('createItem', payload.value)
   }
-};
+}
 
-onMounted(() => fetchItem(id));
+onMounted(async () => {
+  if (id) {
+    await dispatchAction('fetchItem', id)
+    initPayload(item.value)
+  }
+})
 
 </script>
 
@@ -63,11 +70,7 @@ onMounted(() => fetchItem(id));
         <input type="checkbox" v-model="payload.follow" id="follow">
       </div>
 
-      <button type="submit">Save</button>
+      <button type="submit" @click.prevent="onSubmit">Save</button>
     </form>
   </div>
 </template>
-
-<style scoped>
-
-</style>

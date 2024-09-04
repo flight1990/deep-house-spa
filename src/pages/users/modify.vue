@@ -4,30 +4,41 @@ import {onMounted, ref} from "vue";
 
 const {id} = defineProps({
   id: String,
-});
+})
 
-const {getState, dispatchAction} = useStoreModule('usersStore');
+const {getState, dispatchAction} = useStoreModule('usersStore')
+const item = getState('item')
 
 const payload = ref({
   name: '',
   email: '',
   password: '',
   password_confirmation: ''
-});
+})
 
-const fetchItem = async (id) => {
-  if (!id) return;
+const initPayload = (data) => {
+  payload.value.name = data.name
+  payload.value.email = data.email
+}
 
-  await dispatchAction('fetchItem', id);
-  const item = getState('item');
-
-  if (item) {
-    payload.value.name = item.value.name
-    payload.value.email = item.value.email
+const onSubmit = () => {
+  if (!payload.value.password) {
+    delete payload.value.password
   }
-};
 
-onMounted(() => fetchItem(id));
+  if (id) {
+    dispatchAction('updateItem', {payload: payload.value, id: id})
+  } else {
+    dispatchAction('createItem', payload.value)
+  }
+}
+
+onMounted(async () => {
+  if (id) {
+    await dispatchAction('fetchItem', id)
+    initPayload(item.value)
+  }
+});
 
 </script>
 
@@ -54,11 +65,7 @@ onMounted(() => fetchItem(id));
         <input v-model="payload.password_confirmation" type="password" id="password_confirmation">
       </div>
 
-      <button type="submit">Save</button>
+      <button type="submit" @click.prevent="onSubmit">Save</button>
     </form>
   </div>
 </template>
-
-<style scoped>
-
-</style>

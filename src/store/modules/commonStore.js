@@ -3,10 +3,7 @@ const createState = () => ({
     loading: false,
     items: [],
     item: {},
-    params: {
-        page: 1,
-        limit: 10
-    }
+    params: {}
 });
 
 export const initializeCommonState = () => {

@@ -4,28 +4,35 @@ import {onMounted, ref} from "vue";
 
 const {id} = defineProps({
   id: String,
-});
+})
 
 const {getState, dispatchAction} = useStoreModule('pagesStore');
+const item = getState('item');
 
 const payload = ref({
   name: '',
   body: ''
-});
+})
 
-const fetchItem = async (id) => {
-  if (!id) return;
+const intPayload = (data) => {
+  payload.value.name = data.name
+  payload.value.body = data.body
+}
 
-  await dispatchAction('fetchItem', id);
-  const item = getState('item');
-
-  if (item) {
-    payload.value.name = item.value.name
-    payload.value.body = item.value.body
+const onSubmit = () => {
+  if (id) {
+    dispatchAction('updateItem', {payload: payload.value, id: id})
+  } else {
+    dispatchAction('createItem', payload.value)
   }
-};
+}
 
-onMounted(() => fetchItem(id));
+onMounted(async () => {
+  if (id) {
+    await dispatchAction('fetchItem', id)
+    intPayload(item.value)
+  }
+})
 
 </script>
 
@@ -42,11 +49,7 @@ onMounted(() => fetchItem(id));
         <textarea rows="10" cols="150" v-model="payload.body" id="body"></textarea>
       </div>
 
-      <button type="submit">Save</button>
+      <button type="submit" @click.prevent="onSubmit">Save</button>
     </form>
   </div>
 </template>
-
-<style scoped>
-
-</style>

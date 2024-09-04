@@ -9,7 +9,11 @@ const loading = getState('loading')
 const items = getState('items')
 const total = getState('total')
 
-onMounted(() => dispatchAction('fetchItems'))
+const onDelete = async (id) => {
+  await dispatchAction('deleteItem', id)
+}
+
+onMounted(async () => await dispatchAction('fetchItems'))
 
 </script>
 
@@ -33,6 +37,7 @@ onMounted(() => dispatchAction('fetchItems'))
         <td>{{ item.name }}</td>
         <td>
           <router-link :to="{name: 'users.edit', params: {id: item.id}}">Edit</router-link>
+          <a href="#" @click.prevent="onDelete(item.id)">Delete</a>
         </td>
       </tr>
       </tbody>
@@ -43,7 +48,3 @@ onMounted(() => dispatchAction('fetchItems'))
     total: {{ total }}
   </div>
 </template>
-
-<style scoped>
-
-</style>

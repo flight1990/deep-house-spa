@@ -1,13 +1,21 @@
 <script setup>
 import {useStoreModule} from "../../composables/useStoreModule.js";
 import {onMounted} from "vue";
+import TheCategoriesTree from "../../components/TheCategoriesTree.vue";
 
-const {getState, dispatchAction} = useStoreModule('categoriesStore');
+const {getState, dispatchAction} = useStoreModule('categoriesStore')
 
 const loading = getState('loading')
 const items = getState('items')
 
-onMounted(() => dispatchAction('fetchItems'))
+const onDelete = async (id) => {
+  await dispatchAction('deleteItem', id)
+}
+
+onMounted(async () => {
+  await dispatchAction('setParams', {})
+  await dispatchAction('fetchItems')
+})
 
 </script>
 
@@ -17,29 +25,11 @@ onMounted(() => dispatchAction('fetchItems'))
       Create new category
     </router-link>
 
-    <table>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="item in items" :key="item.id">
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>
-          <router-link :to="{name: 'categories.edit', params: {id: item.id}}">Edit</router-link>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <TheCategoriesTree
+        :items="items"
+        @item:deleted="onDelete"
+    />
 
     loading: {{ loading }}
   </div>
 </template>
-
-<style scoped>
-
-</style>
