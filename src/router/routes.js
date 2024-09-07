@@ -6,6 +6,7 @@ import {categoriesRoutes} from "./modules/categoriesRoutes.js";
 import {menuRoutes} from "./modules/menuRoutes.js";
 import {seoRoutes} from "./modules/seoRoutes.js";
 import {productsRoutes} from "./modules/productsRoutes.js";
+import {reviewsRoutes} from "./modules/reviewsRoutes.js";
 
 export const routes = [
     {
@@ -27,7 +28,8 @@ export const routes = [
             ...categoriesRoutes,
             ...menuRoutes,
             ...seoRoutes,
-            ...productsRoutes
+            ...productsRoutes,
+            ...reviewsRoutes
         ]
     }
 ];

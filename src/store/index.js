@@ -5,6 +5,7 @@ import productsStore from "./modules/productsStore.js";
 import categoriesStore from "./modules/categoriesStore.js";
 import seoStore from "./modules/seoStore.js";
 import menuStore from "./modules/menuStore.js";
+import reviewsStore from "./modules/reviewsStore.js";
 
 const store = createStore({
     modules: {
@@ -13,7 +14,8 @@ const store = createStore({
         productsStore,
         categoriesStore,
         seoStore,
-        menuStore
+        menuStore,
+        reviewsStore
     }
 });
 
