@@ -1,5 +1,3 @@
-import { ref } from 'vue';
-
 export function useTreeData(data) {
 
     const processHierarchy = (items, level = 0) => {
@@ -18,14 +16,4 @@ export function useTreeData(data) {
     };
 
     return processHierarchy(data);
-
-    // const setTree = (data) => {
-    //     processedData.value = processHierarchy(data);
-    //     return processedData.value
-    // };
-    //
-    // return {
-    //     processedData,
-    //     setTree
-    // };
 }
