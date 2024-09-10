@@ -38,7 +38,7 @@ onMounted(async () => {
     intPayload(item.value)
   }
 
-  await dispatchAction('fetchItems', {id: id})
+  await dispatchAction('fetchItems', {except: [id]})
 })
 
 </script>
