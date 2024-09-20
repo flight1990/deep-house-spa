@@ -1,49 +1,21 @@
 <script setup>
-import {ref} from "vue";
-import {routes} from "../router/routes.js";
-import {computed} from "vue";
-
-import Button from 'primevue/button';
+import { ref } from "vue";
+import { routes } from "../router/routes.js";
+import { computed } from "vue";
 
 import TheNavigation from "../components/TheNavigation.vue";
 import TheTopBar from "../components/TheTopBar.vue";
 import TheSideBar from "../components/TheSideBar.vue";
 
-const sidebar = ref(false);
-
-const menu = computed(() => routes.find(r => r.children).children.filter(c => c.meta.showInMenu))
+const sidebarIsOpen = ref(false);
 
 </script>
-
 <template>
-
-  <Button label="Primary" />
-  <Button label="Secondary" severity="secondary" />
-  <Button label="Success" severity="success" />
-  <Button label="Info" severity="info" />
-  <Button label="Warn" severity="warn" />
-  <Button label="Help" severity="help" />
-  <Button label="Danger" severity="danger" />
-  <Button label="Contrast" severity="contrast" />
-
-  <TheTopBar
-    v-model:sidebar="sidebar"
-  >
-    <template #title="{model, onModelClick}" >
-      {{ model }}
-    </template>
-
-  </TheTopBar>
-
-  <TheSideBar
-      :sidebar="sidebar"
-  />
-
-  <TheNavigation
-    :routes="menu"
-  />
-
-  <main>
-    <router-view/>
-  </main>
+    <div class="min-h-screen bg-surface-100 dark:bg-surface-950">
+        <TheSideBar v-model:sidebarIsOpen="sidebarIsOpen"/>
+        <TheTopBar v-model:sidebarIsOpen="sidebarIsOpen"/>
+        <main class="overflow-auto transition-all p-4 lg:p-8 lg:ml-72">
+            <router-view/>
+        </main>
+    </div>
 </template>
