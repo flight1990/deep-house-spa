@@ -17,5 +17,7 @@ const sidebarIsOpen = ref(false);
         <main class="overflow-auto transition-all p-4 lg:p-8 lg:ml-72">
             <router-view/>
         </main>
+		<Toast />
+		<ConfirmDialog />
     </div>
 </template>

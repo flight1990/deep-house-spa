@@ -7,8 +7,15 @@ import store from "./store/index.js";
 import PrimeVue from 'primevue/config';
 import { definePreset } from '@primevue/themes';
 import Aura from '@primevue/themes/aura';
+// import Aura from '@/presets/aura';
 import 'primeicons/primeicons.css'
+import ToastService from 'primevue/toastservice';
+import Toast from 'primevue/toast';
+import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from 'primevue/confirmdialog';
 import Button from 'primevue/button';
+import Card from "primevue/card";
+import InputText from 'primevue/inputtext';
 
 const Preset = definePreset(Aura, {
     semantic: {
@@ -25,6 +32,10 @@ const Preset = definePreset(Aura, {
             '900': '#78510f',
             '950': '#452c03',
         },
+        // formField: {
+        //     paddingX: "0.5rem",
+        //     paddingY: "0.35rem",
+        // }
     }
 });
 
@@ -41,6 +52,11 @@ createApp(App)
             },
         },
     })
-
+    .use(ConfirmationService)
+    .use(ToastService)
+    .component('Toast', Toast)
+    .component('ConfirmDialog', ConfirmDialog)
     .component('Button', Button)
+    .component('Card', Card)
+    .component('InputText', InputText)
     .mount('#app')

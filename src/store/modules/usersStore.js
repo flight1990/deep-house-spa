@@ -7,7 +7,7 @@ const commonState = initializeCommonState();
 const state = {
     ...commonState,
     params: {
-        page: 2,
+        page: 1,
         limit:  5
     }
 }
