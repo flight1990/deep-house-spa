@@ -5,7 +5,6 @@ import { onMounted, ref } from "vue";
 import Card from "primevue/card";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import ContextMenu from "primevue/contextmenu";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
@@ -27,57 +26,44 @@ const onPageUpdated = (e) => {
 
 onMounted(() => dispatchAction("fetchItems"));
 
-const cm = ref();
-const selectedItem = ref();
-const selectedItemToDelete = ref();
-const onRowContextMenu = (event) => {
-  cm.value.show(event.originalEvent);
-};
-const menuModel = ref([
-  {
-    label: "Редактировать",
-    icon: "pi pi-pencil",
-	class: "text-sm",
-    command: () => {
-      router.push({ name: "users.edit", params: { id: selectedItem.value.id } });
-    },
-  },
-  {
-    label: "Удалить",
-    icon: "pi pi-trash",
-	class: "text-sm",
-    command: () => {
-		selectedItemToDelete.value = selectedItem.value;
-      deleteItem(selectedItem.value.id);
-    },
-    // command: () => {
-    //   dispatchAction("deleteItem", selectedItem.value.id);
-    // },
-  },
+const columns = ref([
+	{field: 'id', header: 'ID'},
+	{field: 'name', header: 'Имя'},
+	{field: 'email', header: 'Email'},
 ]);
 
+const selectedItem = ref();
 const confirm = useConfirm();
 const toast = useToast();
 
-const deleteItem = () => {
-    confirm.require({
-        header: 'Внимание!',
-        message: 'Вы действительно хотите удалить ' + selectedItemToDelete.value.name + '?',
-        rejectProps: {
-            label: 'Отмена',
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: 'Удалить',
-            severity: 'danger'
-        },
-        accept: () => {
-			dispatchAction("deleteItem", selectedItemToDelete.value.id);
-            toast.add({ severity: 'info', summary: 'Успех!', detail: 'Пользователь ' + selectedItemToDelete.value.name + ' успешно удален!', life: 3000 });
-			selectedItemToDelete.value = null;
-        },
-    });
+const editSelectedItem = () => {
+  router.push({ name: "users.edit", params: { id: selectedItem.value.id } });
+};
+
+const deleteSelectedItem = () => {
+  confirm.require({
+    header: "Внимание!",
+    message: "Вы действительно хотите удалить " + selectedItem.value.name + "?",
+    rejectProps: {
+      label: "Отмена",
+      severity: "secondary",
+      outlined: true,
+    },
+    acceptProps: {
+      label: "Удалить",
+      severity: "danger",
+    },
+    accept: () => {
+      dispatchAction("deleteItem", selectedItem.value.id);
+      toast.add({
+        severity: "info",
+        summary: "Успех!",
+        detail: "Пользователь " + selectedItem.value.name + " успешно удален!",
+        life: 3000,
+      });
+      selectedItem.value = null;
+    },
+  });
 };
 </script>
 
@@ -85,21 +71,40 @@ const deleteItem = () => {
   <div>
     <Card>
       <template #title>
-        <div class="flex items-center justify-between gap-x-10 gap-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-x-10 gap-y-4">
           <div>Пользователи</div>
           <div class="flex items-center gap-x-2">
             <Button
               as="router-link"
               :to="{ name: 'users.create' }"
               icon="pi pi-plus"
-              label="Создать"
-              outlined
+              severity="success"
+              
+              size="small"
+			  v-tooltip.bottom="'Создать'"
+            />
+            <Button
+              icon="pi pi-pencil"
+              severity="warn"
+              
+              size="small"
+			  v-tooltip.bottom="'Редактировать'"
+              :disabled="!selectedItem"
+              @click.prevent="editSelectedItem()"
+            />
+            <Button
+              icon="pi pi-trash"
+              severity="danger"
+              
+              size="small"
+			  v-tooltip.bottom="'Удалить'"
+              :disabled="!selectedItem"
+              @click.prevent="deleteSelectedItem()"
             />
           </div>
         </div>
       </template>
       <template #content>
-        <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
         <DataTable
           :first="(params.page - 1) * params.limit"
           :value="items"
@@ -110,54 +115,18 @@ const deleteItem = () => {
           :rowsPerPageOptions="[5, 10, 20, 50]"
           :totalRecords="total"
           @page="onPageUpdated"
-          contextMenu
-          v-model:contextMenuSelection="selectedItem"
-          @rowContextmenu="onRowContextMenu"
           :pt="{
             pcPaginator: {
               paginatorContainer: { class: '!border-none' },
             },
           }"
-        >	
-			<template #empty> No customers found. </template>
-			<Column field="id" header="ID"></Column>
-			<Column field="name" header="Имя"></Column>
-			<Column field="email" header="Email"></Column>
+          v-model:selection="selectedItem"
+          selectionMode="single"
+        >
+          <template #empty> No customers found. </template>
+		  <Column v-for="col in columns" :field="col.field" :header="col.header" :key="col.field"></Column>
         </DataTable>
       </template>
     </Card>
-
-    <!-- <router-link :to="{ name: 'users.create' }"> Create new user </router-link>
-    <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
-    <DataTable
-      tableStyle="min-width: 50rem"
-      :first="(params.page - 1) * params.limit"
-      :value="items"
-      :lazy="true"
-      :loading="loading"
-      :paginator="true"
-      :rows="params.limit"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
-      :totalRecords="total"
-      @page="onPageUpdated"
-      contextMenu
-      v-model:contextMenuSelection="selectedItem"
-      @rowContextmenu="onRowContextMenu"
-    >
-      <Column field="id" header="ID"></Column>
-      <Column field="name" header="Name"></Column>
-      <Column field="actions" header="Actions">
-        <template #body="slotProps">
-          <router-link :to="{ name: 'users.edit', params: { id: slotProps.data.id } }"
-            >Edit</router-link
-          >
-          <a href="#" @click.prevent="dispatchAction('deleteItem', slotProps.data.id)"
-            >Delete</a
-          >
-        </template>
-      </Column>
-    </DataTable>
-
-    params: {{ params }} total: {{ total }} -->
   </div>
 </template>

@@ -11,6 +11,7 @@ import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css'
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast';
+import Tooltip from 'primevue/tooltip';
 import ConfirmationService from 'primevue/confirmationservice';
 import ConfirmDialog from 'primevue/confirmdialog';
 import Button from 'primevue/button';
@@ -54,6 +55,7 @@ createApp(App)
     })
     .use(ConfirmationService)
     .use(ToastService)
+    .directive('tooltip', Tooltip)
     .component('Toast', Toast)
     .component('ConfirmDialog', ConfirmDialog)
     .component('Button', Button)
