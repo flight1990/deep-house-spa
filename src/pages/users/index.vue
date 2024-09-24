@@ -1,10 +1,6 @@
 <script setup>
-import { useStoreModule } from "../../composables/useStoreModule.js";
+import { useStoreModule } from "@/composables/useStoreModule.js";
 import { onMounted, ref } from "vue";
-
-import Card from "primevue/card";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
@@ -27,9 +23,9 @@ const onPageUpdated = (e) => {
 onMounted(() => dispatchAction("fetchItems"));
 
 const columns = ref([
-	{field: 'id', header: 'ID'},
-	{field: 'name', header: 'Имя'},
-	{field: 'email', header: 'Email'},
+  { field: "id", header: "ID" },
+  { field: "name", header: "Имя" },
+  { field: "email", header: "Email" },
 ]);
 
 const selectedItem = ref();
@@ -79,25 +75,26 @@ const deleteSelectedItem = () => {
               :to="{ name: 'users.create' }"
               icon="pi pi-plus"
               severity="success"
-              
               size="small"
-			  v-tooltip.bottom="'Создать'"
+              v-tooltip.bottom="{ value: 'Создать', showDelay: 1000, hideDelay: 300 }"
             />
             <Button
               icon="pi pi-pencil"
               severity="warn"
-              
               size="small"
-			  v-tooltip.bottom="'Редактировать'"
+              v-tooltip.bottom="{
+                value: 'Редактировать',
+                showDelay: 1000,
+                hideDelay: 300,
+              }"
               :disabled="!selectedItem"
               @click.prevent="editSelectedItem()"
             />
             <Button
               icon="pi pi-trash"
               severity="danger"
-              
               size="small"
-			  v-tooltip.bottom="'Удалить'"
+              v-tooltip.bottom="{ value: 'Удалить', showDelay: 1000, hideDelay: 300 }"
               :disabled="!selectedItem"
               @click.prevent="deleteSelectedItem()"
             />
@@ -124,7 +121,12 @@ const deleteSelectedItem = () => {
           selectionMode="single"
         >
           <template #empty> No customers found. </template>
-		  <Column v-for="col in columns" :field="col.field" :header="col.header" :key="col.field"></Column>
+          <Column
+            v-for="col in columns"
+            :field="col.field"
+            :header="col.header"
+            :key="col.field"
+          ></Column>
         </DataTable>
       </template>
     </Card>

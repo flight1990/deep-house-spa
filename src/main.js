@@ -14,9 +14,12 @@ import Toast from 'primevue/toast';
 import Tooltip from 'primevue/tooltip';
 import ConfirmationService from 'primevue/confirmationservice';
 import ConfirmDialog from 'primevue/confirmdialog';
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 import Button from 'primevue/button';
 import Card from "primevue/card";
 import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
 
 const Preset = definePreset(Aura, {
     semantic: {
@@ -58,7 +61,10 @@ createApp(App)
     .directive('tooltip', Tooltip)
     .component('Toast', Toast)
     .component('ConfirmDialog', ConfirmDialog)
+    .component('DataTable', DataTable)
+    .component('Column', Column)
     .component('Button', Button)
     .component('Card', Card)
     .component('InputText', InputText)
+    .component('Textarea', Textarea)
     .mount('#app')

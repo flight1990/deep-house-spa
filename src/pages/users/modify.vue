@@ -1,8 +1,9 @@
 <script setup>
-import { useStoreModule } from "../../composables/useStoreModule.js";
+import { useStoreModule } from "@/composables/useStoreModule.js";
 import { onMounted, ref } from "vue";
-
 import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
 
 const { id } = defineProps({
   id: String,
@@ -22,8 +23,6 @@ const initPayload = (data) => {
   payload.value.name = data.name;
   payload.value.email = data.email;
 };
-
-const toast = useToast();
 
 const onSubmit = () => {
   if (!payload.value.password) {
