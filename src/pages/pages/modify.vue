@@ -25,8 +25,20 @@ const intPayload = (data) => {
 const onSubmit = () => {
   if (id) {
     dispatchAction("updateItem", { payload: payload.value, id: id });
+    toast.add({
+      severity: "success",
+      summary: "Успех!",
+      detail: "Страница успешно изменена!",
+      life: 3000,
+    });
   } else {
     dispatchAction("createItem", payload.value);
+    toast.add({
+      severity: "success",
+      summary: "Успех!",
+      detail: "Страница успешно создана!",
+      life: 3000,
+    });
   }
 };
 
@@ -53,7 +65,7 @@ onMounted(async () => {
             />
             {{
               payload.name
-                ? "Редактировать страницу " + payload.name
+                ? "Редактировать страницу"
                 : "Создать страницу"
             }}
           </div>
@@ -68,7 +80,7 @@ onMounted(async () => {
             <small v-if="false" class="text-red-500">Error message</small>
           </div>
           <div class="flex flex-col gap-y-1">
-            <label for="name">Название</label>
+            <label for="body">Тело страницы</label>
             <Textarea id="body" v-model="payload.body" rows="3" cols="30" autoResize :invalid="false" />
             <small v-if="false" class="text-red-500">Error message</small>
           </div>

@@ -20,6 +20,8 @@ import Button from 'primevue/button';
 import Card from "primevue/card";
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+import Checkbox from 'primevue/checkbox';
+import InputNumber from 'primevue/inputnumber';
 
 const Preset = definePreset(Aura, {
     semantic: {
@@ -67,4 +69,6 @@ createApp(App)
     .component('Card', Card)
     .component('InputText', InputText)
     .component('Textarea', Textarea)
+    .component('Checkbox', Checkbox)
+    .component('InputNumber', InputNumber)
     .mount('#app')
